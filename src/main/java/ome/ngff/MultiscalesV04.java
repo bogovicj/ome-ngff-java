@@ -3,6 +3,9 @@ package ome.ngff;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 
+import ome.ngff.axes.Axis;
+import ome.ngff.transformations.CoordinateTransformation;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +20,7 @@ public class MultiscalesV04
     private String type;
     private Axis[] axes; // from v0.4+ within JSON
     private Dataset[] datasets;
-    private CoordinateTransformations[] coordinateTransformations; // from v0.4+ within JSON
-
-    // Runtime
+    private CoordinateTransformation[] coordinateTransformations; // from v0.4+ within JSON
 
     // Simply contains the {@codeAxes[] axes}
     // but in reversed order to accommodate
@@ -32,25 +33,7 @@ public class MultiscalesV04
 
     public static class Dataset {
         public String path;
-        public CoordinateTransformations[] coordinateTransformations;
-    }
-
-    public static class CoordinateTransformations {
-        public String type;
-        public double[] scale;
-        public double[] translation;
-        public String path;
-    }
-
-    public static class Axis
-    {
-        public static final String CHANNEL_TYPE = "channel";
-        public static final String TIME_TYPE = "time";
-        public static final String SPATIAL_TYPE = "space";
-
-        public String name;
-        public String type;
-        public String unit;
+        public CoordinateTransformation[] coordinateTransformations;
     }
 
     public void init()
@@ -110,7 +93,7 @@ public class MultiscalesV04
         return axisList;
     }
 
-    public CoordinateTransformations[] getCoordinateTransformations()
+    public CoordinateTransformation[] getCoordinateTransformations()
     {
         return coordinateTransformations;
     }
@@ -120,8 +103,18 @@ public class MultiscalesV04
         return datasets;
     }
 
-    public int numDimensions()
-    {
-        return numDimensions;
-    }
+	public int numDimensions()
+	{
+		return numDimensions;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public String getVersion()
+	{
+		return version;
+	}
 }
