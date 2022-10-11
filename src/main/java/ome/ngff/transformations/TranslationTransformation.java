@@ -8,12 +8,17 @@ public class TranslationTransformation extends CoordinateTransformation
 
 	public TranslationTransformation( final double[] translation )
 	{
-		this( "", translation );
+		this( "", null, null, translation );
 	}
 
-	public TranslationTransformation( String name, final double[] translation )
+	public TranslationTransformation( final String input, final String output, final double[] translation )
 	{
-		super( TYPE, name );
+		this( "", input, output, translation );
+	}
+
+	public TranslationTransformation( final String name, final String input, final String output, final double[] translation )
+	{
+		super( TYPE, name, input, output );
 		this.translation = translation;
 	}
 

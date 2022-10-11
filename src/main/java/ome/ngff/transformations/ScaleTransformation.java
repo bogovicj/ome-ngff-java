@@ -8,12 +8,17 @@ public class ScaleTransformation extends CoordinateTransformation
 
 	public ScaleTransformation( final double[] scale )
 	{
-		this( "", scale );
+		this( "", null, null, scale );
 	}
 
-	public ScaleTransformation( String name, final double[] scale )
+	public ScaleTransformation( final String input, final String output, final double[] scale )
 	{
-		super( TYPE, name );
+		this( "", input, output, scale );
+	}
+
+	public ScaleTransformation( final String name, final String input, final String output, final double[] scale )
+	{
+		super( TYPE, name, input, output );
 		this.scale = scale;
 	}
 

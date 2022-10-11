@@ -12,4 +12,9 @@ public class IdentityTransformation extends CoordinateTransformation
 		super( "identity", name );
 	}
 
+	public IdentityTransformation( String name, String input, String output )
+	{
+		super( "identity", name, input, output );
+	}
+
 }
