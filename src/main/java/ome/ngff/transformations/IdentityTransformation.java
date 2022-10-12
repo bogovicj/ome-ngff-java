@@ -2,19 +2,21 @@ package ome.ngff.transformations;
 
 public class IdentityTransformation extends CoordinateTransformation
 {
+	public static String TYPE = "identity";
+
 	public IdentityTransformation()
 	{
-		super( "identity" );
+		super( TYPE );
 	}
 
 	public IdentityTransformation( String name )
 	{
-		super( "identity", name );
+		super( TYPE, name );
 	}
 
 	public IdentityTransformation( String name, String input, String output )
 	{
-		super( "identity", name, input, output );
+		super( TYPE, name, input, output );
 	}
 
 }

@@ -1,0 +1,110 @@
+{
+    "coordinateSystems" : [
+        {
+            "name" : "ijk",
+            "axes" : [
+                { "name": "i", "type": "space" },
+                { "name": "j", "type": "space" },
+                { "name": "k", "type": "space" }
+            ]
+        },
+        {
+            "name" : "ijk2",
+            "axes" : [
+                { "name": "i", "type": "space" },
+                { "name": "j", "type": "space" },
+                { "name": "k", "type": "space" }
+            ]
+        },
+        {
+            "name" : "ijk scaled",
+            "axes" : [
+                { "name": "i", "type": "space" },
+                { "name": "j", "type": "space" },
+                { "name": "k", "type": "space" }
+            ]
+        },
+        {
+            "name" : "ijk translated",
+            "axes" : [
+                { "name": "i", "type": "space" },
+                { "name": "j", "type": "space" },
+                { "name": "k", "type": "space" }
+            ]
+        },
+        {
+            "name" : "ijk coordinates",
+            "axes" : [
+                { "name": "i", "type": "space" },
+                { "name": "j", "type": "space" },
+                { "name": "k", "type": "space" }
+            ]
+        },
+        {
+            "name" : "ijk displacements",
+            "axes" : [
+                { "name": "i", "type": "space" },
+                { "name": "j", "type": "space" },
+                { "name": "k", "type": "space" }
+            ]
+        },
+        {
+            "name" : "ijk seq",
+            "axes" : [
+                { "name": "i", "type": "space" },
+                { "name": "j", "type": "space" },
+                { "name": "k", "type": "space" }
+            ]
+        }
+    ],
+    "coordinateTransformations" : [
+        {
+            "type": "identity",
+            "input": "ijk",
+            "output": "ijk2"
+        },
+        {
+            "type": "scale",
+            "input": "ijk",
+            "output": "ijk scaled",
+            "scale": [ 2.0, 3.0, 4.0 ]
+        },
+        {
+            "type": "translation",
+            "input": "ijk",
+            "output": "ijk translated",
+            "translation": [ 2.0, 3.0, 4.0 ]
+        },
+        {
+            "type": "displacements",
+            "input": "ijk",
+            "output": "ijk displacements",
+            "path": "displacements"
+        },
+        {
+            "type": "coordinates",
+            "input": "ijk",
+            "output": "ijk coordinates",
+            "path": "coordinates"
+        },
+        {
+            "type": "sequence",
+            "input": "ijk",
+            "output": "ijk seq",
+            "transformations": [ 
+                {
+                    "type": "scale",
+                    "input": "ijk",
+                    "output": "ijk scaled",
+                    "scale": [ 2.0, 3.0, 4.0 ]
+                },
+                {
+                    "type": "translation",
+                    "input": "ijk",
+                    "output": "ijk translated",
+                    "translation": [ 2.0, 3.0, 4.0 ]
+                }
+            ]
+        }
+    ]
+}

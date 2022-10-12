@@ -1,17 +1,18 @@
 package ome.ngff.transformations;
 
 public class SequenceCoordinateTransform extends CoordinateTransformation {
+	
+	public static String TYPE = "sequence";
 
 	protected final CoordinateTransformation[] transformations;
 
 	public SequenceCoordinateTransform( final String name, final String input, final String output, final CoordinateTransformation[] transformations) {
-		super("sequence", name, input, output );
+		super(TYPE, name, input, output );
 		this.transformations = transformations;
 	}
-	
+
 	public SequenceCoordinateTransform( final String input, final String output, final CoordinateTransformation[] transformations) {
-		super("sequence", "", input, output );
-		this.transformations = transformations;
+		this( "", input, output, transformations );
 	}
 
 	public CoordinateTransformation[] getTransformations()

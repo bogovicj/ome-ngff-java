@@ -1,10 +1,10 @@
 package ome.ngff.transformations;
 
-public class ScaleTransformation extends CoordinateTransformation
+public class ScaleTransformation extends ParametrizedCoordinateTransformation
 {
 	public static final String TYPE = "scale";
 	
-	private final double[] scale;
+	private double[] scale;
 
 	public ScaleTransformation( final double[] scale )
 	{
@@ -18,8 +18,19 @@ public class ScaleTransformation extends CoordinateTransformation
 
 	public ScaleTransformation( final String name, final String input, final String output, final double[] scale )
 	{
-		super( TYPE, name, input, output );
+		super( TYPE, name, input, output, null );
 		this.scale = scale;
+	}
+
+	public ScaleTransformation( final String input, final String output, final String path )
+	{
+		this( "", input, output, path );
+	}
+
+	public ScaleTransformation( final String name, final String input, final String output, final String path )
+	{
+		super( TYPE, name, input, output, path );
+		scale = null;
 	}
 
 	public double[] getScale()

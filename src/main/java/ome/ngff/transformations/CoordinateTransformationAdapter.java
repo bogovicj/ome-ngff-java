@@ -1,6 +1,7 @@
 package ome.ngff.transformations;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -8,8 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-public class CoordinateTransformationAdapter
-	implements JsonDeserializer<CoordinateTransformation> {
+public class CoordinateTransformationAdapter implements JsonDeserializer<CoordinateTransformation> {
 
 	@Override
 	public CoordinateTransformation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
@@ -22,21 +22,27 @@ public class CoordinateTransformationAdapter
 		if( !jobj.has("type") )
 			return null;
 
-		CoordinateTransformation out = null;
-		switch( jobj.get("type").getAsString() )
+		final String type = jobj.get("type").getAsString();
+		return context.deserialize( jobj, getTypesToClasses().get( type ) );
+	}
+
+	// singleton
+	public static HashMap< String, Class<?> > typesToClasses;
+
+	public static HashMap<String,Class<?>> getTypesToClasses()
+	{
+		if( typesToClasses == null )
 		{
-		case("identity"):
-			out = context.deserialize( jobj, IdentityTransformation.class );
-			break;
-		case("scale"):
-			out = context.deserialize( jobj, ScaleTransformation.class );
-			break;
-		case("translation"):
-			out = context.deserialize( jobj, TranslationTransformation.class );
-			break;
+			typesToClasses = new HashMap<>();
+			typesToClasses.put( IdentityTransformation.TYPE, IdentityTransformation.class );
+			typesToClasses.put( ScaleTransformation.TYPE, ScaleTransformation.class );
+			typesToClasses.put( TranslationTransformation.TYPE, TranslationTransformation.class );
+			typesToClasses.put( SequenceCoordinateTransform.TYPE, SequenceCoordinateTransform.class );
+			typesToClasses.put( CoordinatesTransformation.TYPE, CoordinatesTransformation.class );
+			typesToClasses.put( DisplacementsTransformation.TYPE, DisplacementsTransformation.class );
 		}
 
-		return out;
+		return typesToClasses;
 	}
 
 }

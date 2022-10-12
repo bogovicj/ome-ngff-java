@@ -1,10 +1,10 @@
 package ome.ngff.transformations;
 
-public class TranslationTransformation extends CoordinateTransformation
+public class TranslationTransformation extends ParametrizedCoordinateTransformation
 {
 	public static final String TYPE = "translation";
 
-	protected final double[] translation;
+	protected double[] translation;
 
 	public TranslationTransformation( final double[] translation )
 	{
@@ -18,8 +18,19 @@ public class TranslationTransformation extends CoordinateTransformation
 
 	public TranslationTransformation( final String name, final String input, final String output, final double[] translation )
 	{
-		super( TYPE, name, input, output );
+		super( TYPE, name, input, output, null );
 		this.translation = translation;
+	}
+
+	public TranslationTransformation( final String input, final String output, final String path )
+	{
+		this( "", input, output, path );
+	}
+
+	public TranslationTransformation( final String name, final String input, final String output, final String path )
+	{
+		super( TYPE, name, input, output, path );
+		translation = null;
 	}
 
 	public double[] getTranslation()
