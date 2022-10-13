@@ -6,7 +6,7 @@ public class DisplacementsTransformation extends ParametrizedCoordinateTransform
 
 	public DisplacementsTransformation( final String input, final String output, final String path )
 	{
-		this( "", input, output, path );
+		this( null, input, output, path );
 	}
 
 	public DisplacementsTransformation( final String name, final String input, final String output, final String path )

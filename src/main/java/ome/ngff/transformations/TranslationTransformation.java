@@ -8,12 +8,12 @@ public class TranslationTransformation extends ParametrizedCoordinateTransformat
 
 	public TranslationTransformation( final double[] translation )
 	{
-		this( "", null, null, translation );
+		this( null, null, null, translation );
 	}
 
 	public TranslationTransformation( final String input, final String output, final double[] translation )
 	{
-		this( "", input, output, translation );
+		this( null, input, output, translation );
 	}
 
 	public TranslationTransformation( final String name, final String input, final String output, final double[] translation )
@@ -24,7 +24,7 @@ public class TranslationTransformation extends ParametrizedCoordinateTransformat
 
 	public TranslationTransformation( final String input, final String output, final String path )
 	{
-		this( "", input, output, path );
+		this( null, input, output, path );
 	}
 
 	public TranslationTransformation( final String name, final String input, final String output, final String path )

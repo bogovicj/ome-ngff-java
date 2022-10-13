@@ -6,7 +6,7 @@ public class CoordinatesTransformation extends ParametrizedCoordinateTransformat
 
 	public CoordinatesTransformation( final String input, final String output, final String path )
 	{
-		this( "", input, output, path );
+		this( null, input, output, path );
 	}
 
 	public CoordinatesTransformation( final String name, final String input, final String output, final String path )

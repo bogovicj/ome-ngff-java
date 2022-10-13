@@ -12,7 +12,7 @@ public class SequenceCoordinateTransform extends CoordinateTransformation {
 	}
 
 	public SequenceCoordinateTransform( final String input, final String output, final CoordinateTransformation[] transformations) {
-		this( "", input, output, transformations );
+		this( null, input, output, transformations );
 	}
 
 	public CoordinateTransformation[] getTransformations()

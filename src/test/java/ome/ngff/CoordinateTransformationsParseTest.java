@@ -18,12 +18,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
+import ome.ngff.axes.Axis;
 import ome.ngff.axes.CoordinateSystem;
+import ome.ngff.axes.Unit;
 import ome.ngff.transformations.CoordinateTransformation;
 import ome.ngff.transformations.CoordinateTransformationAdapter;
 import ome.ngff.transformations.CoordinatesTransformation;
 import ome.ngff.transformations.DisplacementsTransformation;
 import ome.ngff.transformations.ParametrizedCoordinateTransformation;
+import ome.ngff.transformations.ScaleTransformation;
+import ome.ngff.transformations.SequenceCoordinateTransform;
+import ome.ngff.transformations.TranslationTransformation;
 
 public class CoordinateTransformationsParseTest
 {
@@ -61,9 +66,9 @@ public class CoordinateTransformationsParseTest
 
 		for( CoordinateSystem cs : css )
 		{
-			assertNotNull( cs.name );
-			assertNotNull( cs.axes );
-			assertTrue( cs.axes.length > 0 );
+			assertNotNull( cs.getName() );
+			assertNotNull( cs.getAxes() );
+			assertTrue( cs.getAxes().length > 0 );
 		}
 
 		final JsonElement ctElem = js.getAsJsonObject().get("coordinateTransformations");
@@ -82,6 +87,40 @@ public class CoordinateTransformationsParseTest
 				assertNotNull( pct.getPath() );
 			}
 		}
+	}
+
+	@Test
+	public void writeTest()
+	{
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(CoordinateTransformation.class, new CoordinateTransformationAdapter() );
+		final Gson gson = gsonBuilder.create();
+
+		CoordinateSystem csIn = new CoordinateSystem( "in",
+				new Axis[] {
+						new Axis( "x", Axis.SPATIAL_TYPE, Unit.MICROMETER_UNIT ),
+						new Axis( "y", Axis.SPATIAL_TYPE, Unit.MICROMETER_UNIT )
+				});
+
+		CoordinateSystem csOut = new CoordinateSystem( "out",
+				new Axis[] {
+						new Axis( "x", Axis.SPATIAL_TYPE, Unit.MICROMETER_UNIT ),
+						new Axis( "y", Axis.SPATIAL_TYPE, Unit.MICROMETER_UNIT )
+				});
+
+		SequenceCoordinateTransform seq = new SequenceCoordinateTransform( "in", "out",
+				new CoordinateTransformation[] {
+						new ScaleTransformation( new double[] {2,3} ),
+						new TranslationTransformation( new double[] {-10,100 } ),
+				});
+
+		CoordinateSystem[] coordSystems = new CoordinateSystem[] { csIn, csOut };
+		System.out.println( gson.toJson( coordSystems ));
+
+		CoordinateTransformation[] coordTransformations = new CoordinateTransformation[] { seq };
+		System.out.println( gson.toJson( coordTransformations ));
+
+		// TODO automatically validate the output
 	}
 
 }

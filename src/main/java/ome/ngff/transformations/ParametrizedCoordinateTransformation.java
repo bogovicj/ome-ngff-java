@@ -17,7 +17,7 @@ public abstract class ParametrizedCoordinateTransformation extends CoordinateTra
 
 	public ParametrizedCoordinateTransformation( final String type, final String path )
 	{
-		this( type, "", null, null, path );
+		this( type, null, null, null, path );
 	}
 
 	public String getPath()

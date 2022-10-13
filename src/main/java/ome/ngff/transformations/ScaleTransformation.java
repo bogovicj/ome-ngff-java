@@ -8,12 +8,12 @@ public class ScaleTransformation extends ParametrizedCoordinateTransformation
 
 	public ScaleTransformation( final double[] scale )
 	{
-		this( "", null, null, scale );
+		this( null, null, null, scale );
 	}
 
 	public ScaleTransformation( final String input, final String output, final double[] scale )
 	{
-		this( "", input, output, scale );
+		this( null, input, output, scale );
 	}
 
 	public ScaleTransformation( final String name, final String input, final String output, final double[] scale )
@@ -24,7 +24,7 @@ public class ScaleTransformation extends ParametrizedCoordinateTransformation
 
 	public ScaleTransformation( final String input, final String output, final String path )
 	{
-		this( "", input, output, path );
+		this( null, input, output, path );
 	}
 
 	public ScaleTransformation( final String name, final String input, final String output, final String path )
