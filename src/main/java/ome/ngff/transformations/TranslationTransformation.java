@@ -1,6 +1,6 @@
 package ome.ngff.transformations;
 
-public class TranslationTransformation extends ParametrizedCoordinateTransformation
+public class TranslationTransformation extends ParametrizedCoordinateTransformation<TranslationTransformation>
 {
 	public static final String TYPE = "translation";
 
@@ -31,6 +31,12 @@ public class TranslationTransformation extends ParametrizedCoordinateTransformat
 	{
 		super( TYPE, name, input, output, path );
 		translation = null;
+	}
+
+	public TranslationTransformation( TranslationTransformation other )
+	{
+		super( other );
+		this.translation = other.translation;
 	}
 
 	public double[] getTranslation()

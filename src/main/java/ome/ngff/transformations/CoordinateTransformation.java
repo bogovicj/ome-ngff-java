@@ -1,51 +1,15 @@
 package ome.ngff.transformations;
 
-public abstract class CoordinateTransformation
+public interface CoordinateTransformation
 {
-	protected final String name;
+	public final static String KEY = "coordinateTransformations";
 
-	protected final String type;
-	
-	protected final String input;
+	public String getName();
 
-	protected final String output;
+	public String getType();
 
-	public CoordinateTransformation( final String type, final String name, final String input, final String output )
-	{
-		this.name = name;
-		this.type = type;
-		this.input = input;
-		this.output = output;
-	}
+	public String getInput();
 
-	public CoordinateTransformation( final String type, final String name )
-	{
-		this( type, name, null, null );
-	}
-
-	public CoordinateTransformation( final String type )
-	{
-		this( type, "", null, null );
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public String getType()
-	{
-		return type;
-	}
-
-	public String getInput()
-	{
-		return input;
-	}
-
-	public String getOutput()
-	{
-		return output;
-	}
+	public String getOutput();
 
 }

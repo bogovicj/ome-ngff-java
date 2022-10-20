@@ -33,6 +33,18 @@ public class ScaleTransformation extends ParametrizedCoordinateTransformation
 		scale = null;
 	}
 
+	public ScaleTransformation( ScaleTransformation other, final double[] scale )
+	{
+		super( other );
+		this.scale = scale;
+	}
+
+	public ScaleTransformation( ScaleTransformation other )
+	{
+		super( other );
+		this.scale = other.scale;
+	}
+
 	public double[] getScale()
 	{
 		return scale;

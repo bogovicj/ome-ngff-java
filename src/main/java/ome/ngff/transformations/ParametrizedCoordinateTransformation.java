@@ -1,6 +1,7 @@
 package ome.ngff.transformations;
 
-public abstract class ParametrizedCoordinateTransformation extends CoordinateTransformation
+public abstract class ParametrizedCoordinateTransformation<T extends ParametrizedCoordinateTransformation<T>> 
+	extends AbstractCoordinateTransformation<T>
 {
 	private final String path;
 
@@ -18,6 +19,12 @@ public abstract class ParametrizedCoordinateTransformation extends CoordinateTra
 	public ParametrizedCoordinateTransformation( final String type, final String path )
 	{
 		this( type, null, null, null, path );
+	}
+
+	public ParametrizedCoordinateTransformation( T other )
+	{
+		super( other );
+		this.path = other.getPath();
 	}
 
 	public String getPath()

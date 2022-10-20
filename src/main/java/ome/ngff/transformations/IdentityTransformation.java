@@ -1,8 +1,8 @@
 package ome.ngff.transformations;
 
-public class IdentityTransformation extends CoordinateTransformation
+public class IdentityTransformation extends AbstractCoordinateTransformation
 {
-	public static String TYPE = "identity";
+	public static final String TYPE = "identity";
 
 	public IdentityTransformation()
 	{
@@ -24,4 +24,8 @@ public class IdentityTransformation extends CoordinateTransformation
 		super( TYPE, name, input, output );
 	}
 
+	public IdentityTransformation( IdentityTransformation other )
+	{
+		super( other );
+	}
 }

@@ -21,7 +21,7 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 	@Override
 	public CoordinateTransformation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
-		
+
 		if( !json.isJsonObject() )
 			return null;
 		
@@ -29,8 +29,63 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 		if( !jobj.has("type") )
 			return null;
 
-		final String type = jobj.get("type").getAsString();
-		return context.deserialize( jobj, getTypesToClasses().get( type ) );
+		CoordinateTransformation out = null;
+		switch( jobj.get("type").getAsString() )
+		{
+
+		case(IdentityTransformation.TYPE):
+			out = context.deserialize( jobj, IdentityTransformation.class );
+			break;
+		case(ScaleTransformation.TYPE):
+			out = context.deserialize( jobj, ScaleTransformation.class );
+			break;
+		case(TranslationTransformation.TYPE):
+			out = context.deserialize( jobj, TranslationTransformation.class );
+			break;
+		case(AffineTransformation.TYPE):
+			out = context.deserialize( jobj, AffineTransformation.class );
+			break;
+		case(DisplacementsTransformation.TYPE):
+			out = context.deserialize( jobj, DisplacementsTransformation.class );
+			break;
+		case(BijectionTransformation.TYPE):
+			final JsonObject btmp = context.deserialize( jobj, JsonObject.class );
+			final String name = btmp.has( "name" ) ? btmp.get( "name" ).getAsString() : null;
+			final String input = btmp.has( "input" ) ? btmp.get( "input" ).getAsString() : null;
+			final String output = btmp.has( "output" ) ? btmp.get( "output" ).getAsString() : null;
+			if( !btmp.has("forward") && !btmp.has("inverse")) {
+				out = null;
+			}
+			else {
+				CoordinateTransformation fwd = context.deserialize( btmp.get("forward"), CoordinateTransformation.class );
+				CoordinateTransformation inv = context.deserialize( btmp.get("inverse"), CoordinateTransformation.class );
+				out = new BijectionTransformation( name, input, output, fwd, inv );
+			}
+			break;
+		case(SequenceTransformation.TYPE):
+			// don't like that this is necessary
+			// in the future, look into RuntimeTypeAdapterFactory in gson-extras
+			// when it is more officially maintained
+			final IdentityTransformation id = context.deserialize( jobj, IdentityTransformation.class );
+			if( jobj.has("transformations"))
+			{
+				final JsonArray ja = jobj.get("transformations").getAsJsonArray();
+				final CoordinateTransformation[] transforms = new CoordinateTransformation[ ja.size() ];
+				for( int i=0; i < ja.size(); i++) {
+					JsonElement e = ja.get(i).getAsJsonObject();
+					transforms[i] = context.deserialize( e, CoordinateTransformation.class );
+				}
+				out = new SequenceTransformation(id.getName(), id.getInput(), id.getOutput(), transforms);
+			}
+			else {
+				out = null;
+			}
+			break;
+		default:
+			return null;
+		}
+
+		return out;
 	}
 
 	@Override
@@ -38,9 +93,9 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 	{
 		// why do i have to do this!?
 		final JsonElement elem;
-		if( src instanceof SequenceCoordinateTransform )
+		if( src instanceof SequenceTransformation )
 		{
-			SequenceCoordinateTransform seq = (SequenceCoordinateTransform)src;
+			SequenceTransformation seq = (SequenceTransformation)src;
 			JsonArray xfms = new JsonArray();
 			for( CoordinateTransformation t : seq.getTransformations() ) {
 				Type type = TypeToken.get(t.getClass()).getType();
@@ -79,9 +134,11 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 			typesToClasses.put( IdentityTransformation.TYPE, IdentityTransformation.class );
 			typesToClasses.put( ScaleTransformation.TYPE, ScaleTransformation.class );
 			typesToClasses.put( TranslationTransformation.TYPE, TranslationTransformation.class );
-			typesToClasses.put( SequenceCoordinateTransform.TYPE, SequenceCoordinateTransform.class );
+			typesToClasses.put( AffineTransformation.TYPE, AffineTransformation.class );
+			typesToClasses.put( SequenceTransformation.TYPE, SequenceTransformation.class );
 			typesToClasses.put( CoordinatesTransformation.TYPE, CoordinatesTransformation.class );
 			typesToClasses.put( DisplacementsTransformation.TYPE, DisplacementsTransformation.class );
+			typesToClasses.put( BijectionTransformation.TYPE, BijectionTransformation.class );
 		}
 
 		return typesToClasses;

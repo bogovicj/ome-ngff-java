@@ -27,7 +27,7 @@ import ome.ngff.transformations.CoordinatesTransformation;
 import ome.ngff.transformations.DisplacementsTransformation;
 import ome.ngff.transformations.ParametrizedCoordinateTransformation;
 import ome.ngff.transformations.ScaleTransformation;
-import ome.ngff.transformations.SequenceCoordinateTransform;
+import ome.ngff.transformations.SequenceTransformation;
 import ome.ngff.transformations.TranslationTransformation;
 
 public class CoordinateTransformationsParseTest
@@ -108,7 +108,7 @@ public class CoordinateTransformationsParseTest
 						new Axis( "y", Axis.SPATIAL_TYPE, Unit.MICROMETER_UNIT )
 				});
 
-		SequenceCoordinateTransform seq = new SequenceCoordinateTransform( "in", "out",
+		SequenceTransformation seq = new SequenceTransformation( "in", "out",
 				new CoordinateTransformation[] {
 						new ScaleTransformation( new double[] {2,3} ),
 						new TranslationTransformation( new double[] {-10,100 } ),

@@ -66,7 +66,7 @@ public class MultiscalesV04
     public int getChannelAxisIndex()
     {
         for ( int d = 0; d < numDimensions; d++ )
-            if ( axisList.get( d ).type.equals( Axis.CHANNEL_TYPE ) )
+            if ( axisList.get( d ).getType().equals( Axis.CHANNEL_TYPE ) )
                 return d;
         return -1;
     }
@@ -74,7 +74,7 @@ public class MultiscalesV04
     public int getTimePointAxisIndex()
     {
         for ( int d = 0; d < numDimensions; d++ )
-            if ( axisList.get( d ).type.equals( Axis.TIME_TYPE ) )
+            if ( axisList.get( d ).getType().equals( Axis.TIME_TYPE ) )
                 return d;
         return -1;
     }
@@ -82,8 +82,8 @@ public class MultiscalesV04
     public int getSpatialAxisIndex( String axisName )
     {
         for ( int d = 0; d < numDimensions; d++ )
-            if ( axisList.get( d ).type.equals( Axis.SPATIAL_TYPE )
-                 && axisList.get( d ).name.equals( axisName ) )
+            if ( axisList.get( d ).getType().equals( Axis.SPATIAL_TYPE )
+                 && axisList.get( d ).getName().equals( axisName ) )
                 return d;
         return -1;
     }

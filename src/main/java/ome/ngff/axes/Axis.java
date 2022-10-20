@@ -66,4 +66,9 @@ public class Axis
 		return new Axis( name, type, unit, discrete );
 	}
 
+	public static Axis defaultArray( int index )
+	{
+		return new Axis( String.format( "dim_%d", index ), "array", null, true );
+	}
+
 }

@@ -13,4 +13,10 @@ public class CoordinatesTransformation extends ParametrizedCoordinateTransformat
 	{
 		super( TYPE, name, input, output, path );
 	}
+
+	public CoordinatesTransformation( CoordinatesTransformation other )
+	{
+		super( other );
+	}
+
 }
