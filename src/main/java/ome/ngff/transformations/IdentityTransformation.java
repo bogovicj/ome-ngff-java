@@ -1,6 +1,6 @@
 package ome.ngff.transformations;
 
-public class IdentityTransformation extends AbstractCoordinateTransformation
+public class IdentityTransformation extends AbstractCoordinateTransformation<IdentityTransformation>
 {
 	public static final String TYPE = "identity";
 
@@ -27,5 +27,10 @@ public class IdentityTransformation extends AbstractCoordinateTransformation
 	public IdentityTransformation( IdentityTransformation other )
 	{
 		super( other );
+	}
+
+	public IdentityTransformation( IdentityTransformation other, String[] inputAxes, String[] outputAxes )
+	{
+		super( other, inputAxes, outputAxes );
 	}
 }

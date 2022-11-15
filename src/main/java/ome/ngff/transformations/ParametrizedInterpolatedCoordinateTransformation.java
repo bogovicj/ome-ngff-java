@@ -46,6 +46,12 @@ public abstract class ParametrizedInterpolatedCoordinateTransformation<T extends
 		this.interpolation = other.interpolation;
 	}
 
+	public ParametrizedInterpolatedCoordinateTransformation( T other, String[] inputAxes, String[] outputAxes )
+	{
+		super( other, inputAxes, outputAxes );
+		this.interpolation = other.interpolation;
+	}
+
 	public String getInterpolation()
 	{
 		return interpolation;

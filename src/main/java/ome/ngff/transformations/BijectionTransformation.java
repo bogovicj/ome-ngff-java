@@ -23,6 +23,13 @@ public class BijectionTransformation extends AbstractCoordinateTransformation<Bi
 		this.inverse = other.inverse;
 	}
 
+	public BijectionTransformation( BijectionTransformation other, String[] inputAxes, String[] outputAxes )
+	{
+		super(other, inputAxes, outputAxes );
+		this.forward = other.forward;
+		this.inverse = other.inverse;
+	}
+
 	public CoordinateTransformation getForward()
 	{
 		return forward;

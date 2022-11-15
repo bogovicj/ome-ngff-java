@@ -1,5 +1,6 @@
 package ome.ngff;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -21,6 +22,7 @@ import com.google.gson.JsonElement;
 import ome.ngff.axes.Axis;
 import ome.ngff.axes.CoordinateSystem;
 import ome.ngff.axes.Unit;
+import ome.ngff.transformations.ByDimensionTransformation;
 import ome.ngff.transformations.CoordinateTransformation;
 import ome.ngff.transformations.CoordinateTransformationAdapter;
 import ome.ngff.transformations.CoordinatesTransformation;
@@ -32,6 +34,51 @@ import ome.ngff.transformations.TranslationTransformation;
 
 public class CoordinateTransformationsParseTest
 {
+	@Test
+	public void testByDimension()
+	{
+		final URL zattrsUrl = CoordinateTransformationsParseTest.class.getResource( "cts.zarr/byDimension.json" );
+		String attrs = null;
+		try
+		{
+			attrs = Files.readString( Paths.get( zattrsUrl.toURI() ));
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace();
+			fail();
+		}
+		catch ( URISyntaxException e )
+		{
+			e.printStackTrace();
+			fail();
+		}
+
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(CoordinateTransformation.class, new CoordinateTransformationAdapter() );
+		final Gson gson = gsonBuilder.create();
+
+		final JsonElement js = gson.fromJson( attrs, JsonElement.class );
+
+		final JsonElement csElem = js.getAsJsonObject().get("coordinateSystems");
+		final CoordinateSystem[] css = gson.fromJson( csElem, CoordinateSystem[].class );
+
+		final JsonElement ctElem = js.getAsJsonObject().get("coordinateTransformations");
+		final CoordinateTransformation[] cts = gson.fromJson( ctElem, CoordinateTransformation[].class );
+		final ByDimensionTransformation ct = ( ByDimensionTransformation ) cts[0];
+		CoordinateTransformation[] tforms = ct.getTransformations();
+
+		final String[] inAxes1 = tforms[0].getInputAxes();
+		final String[] inAxes2 = tforms[1].getInputAxes();
+		assertArrayEquals( new String[]{"i", "j"}, inAxes1 );
+		assertArrayEquals( new String[]{"k"}, inAxes2 );
+
+		final String[] outAxes1 = tforms[0].getOutputAxes();
+		final String[] outAxes2 = tforms[1].getOutputAxes();
+		assertArrayEquals( new String[]{"i", "j"}, outAxes1 );
+		assertArrayEquals( new String[]{"k"}, outAxes2 );
+	}
+
 	@Test
 	public void testParsing()
 	{
@@ -115,10 +162,10 @@ public class CoordinateTransformationsParseTest
 				});
 
 		CoordinateSystem[] coordSystems = new CoordinateSystem[] { csIn, csOut };
-		System.out.println( gson.toJson( coordSystems ));
+//		System.out.println( gson.toJson( coordSystems ));
 
 		CoordinateTransformation[] coordTransformations = new CoordinateTransformation[] { seq };
-		System.out.println( gson.toJson( coordTransformations ));
+//		System.out.println( gson.toJson( coordTransformations ));
 
 		// TODO automatically validate the output
 	}

@@ -45,6 +45,12 @@ public class AffineTransformation extends ParametrizedCoordinateTransformation<A
 		this.affine = other.affine;
 	}
 
+	public AffineTransformation( AffineTransformation other, String[] inputAxes, String[] outputAxes  )
+	{
+		super( other, inputAxes, outputAxes );
+		this.affine = other.affine;
+	}
+
 	public double[] getAffine()
 	{
 		return affine;

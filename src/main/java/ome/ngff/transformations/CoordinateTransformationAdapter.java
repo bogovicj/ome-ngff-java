@@ -1,5 +1,6 @@
 package ome.ngff.transformations;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
@@ -21,6 +22,7 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 	@Override
 	public CoordinateTransformation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
+		
 
 		if( !json.isJsonObject() )
 			return null;
@@ -28,25 +30,51 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 		final JsonObject jobj = json.getAsJsonObject();
 		if( !jobj.has("type") )
 			return null;
+		
+		String[] inputAxes = null;
+		if( jobj.has( "input" ) && jobj.get( "input" ).isJsonArray())
+		{
+			inputAxes = toStringArray( jobj, "input" );
+			jobj.addProperty( "input", "" );
+		}
 
-		CoordinateTransformation out = null;
+		String[] outputAxes = null;
+		if( jobj.has( "output" ) && jobj.get( "output" ).isJsonArray())
+		{
+			outputAxes = toStringArray( jobj, "output" );
+			jobj.addProperty( "output", "" );
+		}
+
+		Class clz;
+		AbstractCoordinateTransformation< ? > out = null;
 		switch( jobj.get("type").getAsString() )
 		{
 
 		case(IdentityTransformation.TYPE):
-			out = context.deserialize( jobj, IdentityTransformation.class );
+			clz = IdentityTransformation.class;
+//			out = context.deserialize( jobj, IdentityTransformation.class );
+//			if( inputAxes != null )
+//				out = new IdentityTransformation( (IdentityTransformation)out, inputAxes, outputAxes );
 			break;
 		case(ScaleTransformation.TYPE):
 			out = context.deserialize( jobj, ScaleTransformation.class );
+			if( inputAxes != null )
+				out = new ScaleTransformation( (ScaleTransformation)out, inputAxes, outputAxes );
 			break;
 		case(TranslationTransformation.TYPE):
 			out = context.deserialize( jobj, TranslationTransformation.class );
+			if( inputAxes != null )
+				out = new TranslationTransformation( (TranslationTransformation)out, inputAxes, outputAxes );
 			break;
 		case(AffineTransformation.TYPE):
 			out = context.deserialize( jobj, AffineTransformation.class );
+			if( inputAxes != null )
+				out = new AffineTransformation( (AffineTransformation)out, inputAxes, outputAxes );
 			break;
 		case(DisplacementsTransformation.TYPE):
 			out = context.deserialize( jobj, DisplacementsTransformation.class );
+			if( inputAxes != null )
+				out = new DisplacementsTransformation( (DisplacementsTransformation)out, inputAxes, outputAxes );
 			break;
 		case(BijectionTransformation.TYPE):
 			final JsonObject btmp = context.deserialize( jobj, JsonObject.class );
@@ -60,6 +88,8 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 				CoordinateTransformation fwd = context.deserialize( btmp.get("forward"), CoordinateTransformation.class );
 				CoordinateTransformation inv = context.deserialize( btmp.get("inverse"), CoordinateTransformation.class );
 				out = new BijectionTransformation( name, input, output, fwd, inv );
+				if( inputAxes != null )
+					out = new BijectionTransformation( (BijectionTransformation)out, inputAxes, outputAxes );
 			}
 			break;
 		case(SequenceTransformation.TYPE):
@@ -76,15 +106,53 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 					transforms[i] = context.deserialize( e, CoordinateTransformation.class );
 				}
 				out = new SequenceTransformation(id.getName(), id.getInput(), id.getOutput(), transforms);
+
+				if( inputAxes != null )
+					out = new SequenceTransformation( (SequenceTransformation)out, inputAxes, outputAxes );
 			}
 			else {
 				out = null;
 			}
 			break;
+		case(ByDimensionTransformation.TYPE):
+			final IdentityTransformation idbd = context.deserialize( jobj, IdentityTransformation.class );
+			if( jobj.has("transformations"))
+			{
+				final JsonArray ja = jobj.get("transformations").getAsJsonArray();
+				final CoordinateTransformation[] transforms = new CoordinateTransformation[ ja.size() ];
+				for( int i=0; i < ja.size(); i++) {
+					JsonElement e = ja.get(i).getAsJsonObject();
+					transforms[i] = context.deserialize( e, CoordinateTransformation.class );
+				}
+				out = new ByDimensionTransformation(idbd.getName(), idbd.getInput(), idbd.getOutput(), transforms);
+
+				if( inputAxes != null )
+					out = new ByDimensionTransformation( (ByDimensionTransformation)out, inputAxes, outputAxes );
+			}
+			break;
 		default:
 			return null;
 		}
+		
+//		if( inputAxes != null )
+//		{
+//			try
+//			{
+//				Constructor cons = clz.getConstructor( clz, String.class, String.class );
+//
+//			}
+//			catch ( NoSuchMethodException e )
+//			{
+//				e.printStackTrace();
+//			}
+//			catch ( SecurityException e )
+//			{
+//				e.printStackTrace();
+//			}
+//		}
 
+
+		
 		return out;
 	}
 
@@ -120,7 +188,6 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 			}
 		}
 		return elem;
-
 	}
 
 	// singleton
@@ -142,6 +209,40 @@ public class CoordinateTransformationAdapter implements JsonDeserializer<Coordin
 		}
 
 		return typesToClasses;
+	}
+	
+	private static String[] toStringArray( JsonObject jobj, String key )
+	{
+		JsonArray arr = jobj.get( key ).getAsJsonArray();
+		String[] out = new String[ arr.size() ];
+		for( int i = 0; i < arr.size(); i++ )
+			out[i] = arr.get( i ).getAsString();
+		
+		return out;
+	}
+	
+	protected static class AxisPlaceholder extends AbstractCoordinateTransformation< AxisPlaceholder >
+	{
+		protected String[] input;
+		protected String[] output;
+		public AxisPlaceholder( String type )
+		{
+			super( type );
+		}
+		
+		@Override
+		public String[] getInputAxes()
+		{
+			return input;
+		}
+
+		@Override
+		public String[] getOutputAxes()
+		{
+			return output;
+		}
+		
+		
 	}
 
 }

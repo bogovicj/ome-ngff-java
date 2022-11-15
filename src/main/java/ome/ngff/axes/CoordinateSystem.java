@@ -45,7 +45,8 @@ public class CoordinateSystem
 
 	public static CoordinateSystem defaultArray( String name, int nd )
 	{
-		return new CoordinateSystem( name, IntStream.range( 0, nd ).mapToObj( i -> Axis.defaultArray( i ) ).toArray( Axis[]::new ) );
+		return new CoordinateSystem( name, 
+				IntStream.range( 0, nd ) .mapToObj( i -> Axis.defaultArray( i ) ).toArray( Axis[]::new ) );
 	}
 
 }

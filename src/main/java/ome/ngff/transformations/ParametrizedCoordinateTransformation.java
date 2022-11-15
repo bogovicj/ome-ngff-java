@@ -27,6 +27,12 @@ public abstract class ParametrizedCoordinateTransformation<T extends Parametrize
 		this.path = other.getPath();
 	}
 
+	public ParametrizedCoordinateTransformation( T other, String[] inputAxes, String[] outputAxes )
+	{
+		super( other, inputAxes, outputAxes );
+		this.path = other.getPath();
+	}
+
 	public String getPath()
 	{
 		return path;

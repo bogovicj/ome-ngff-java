@@ -19,4 +19,9 @@ public class DisplacementsTransformation extends ParametrizedInterpolatedCoordin
 	{
 		super( other );
 	}
+
+	public DisplacementsTransformation( DisplacementsTransformation other, String[] inputAxes, String[] outputAxes )
+	{
+		super( other, inputAxes, outputAxes );
+	}
 }

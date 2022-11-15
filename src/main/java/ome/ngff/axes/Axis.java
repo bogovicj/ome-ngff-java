@@ -7,6 +7,8 @@ public class Axis
 	public static final String TIME_TYPE = "time";
 	public static final String SPATIAL_TYPE = "space";
 	public static final String ARRAY_TYPE = "array";
+	public static final String DISPLACEMENT_TYPE = "displacement";
+	public static final String POSITION_TYPE = "position";
 
 	protected final String name;
 	protected final String type;

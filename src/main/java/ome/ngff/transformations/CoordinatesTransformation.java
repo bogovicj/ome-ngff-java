@@ -1,6 +1,6 @@
 package ome.ngff.transformations;
 
-public class CoordinatesTransformation extends ParametrizedCoordinateTransformation
+public class CoordinatesTransformation extends ParametrizedCoordinateTransformation<CoordinatesTransformation>
 {
 	public static final String TYPE = "coordinates";
 
@@ -17,6 +17,11 @@ public class CoordinatesTransformation extends ParametrizedCoordinateTransformat
 	public CoordinatesTransformation( CoordinatesTransformation other )
 	{
 		super( other );
+	}
+
+	public CoordinatesTransformation( CoordinatesTransformation other, String[] inputAxes, String[] outputAxes )
+	{
+		super( other, inputAxes, outputAxes );
 	}
 
 }

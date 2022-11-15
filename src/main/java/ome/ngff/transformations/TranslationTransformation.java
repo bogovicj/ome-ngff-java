@@ -39,6 +39,12 @@ public class TranslationTransformation extends ParametrizedCoordinateTransformat
 		this.translation = other.translation;
 	}
 
+	public TranslationTransformation( TranslationTransformation other, String[] inputAxes, String[] outputAxes )
+	{
+		super( other, inputAxes, outputAxes );
+		this.translation = other.translation;
+	}
+
 	public double[] getTranslation()
 	{
 		return translation;

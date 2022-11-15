@@ -21,6 +21,12 @@ public class SequenceTransformation extends AbstractCoordinateTransformation<Seq
 		this.transformations = other.transformations; // TODO is shallow copy okay?
 	}
 
+	public SequenceTransformation( SequenceTransformation other, String[] inputAxes, String[] outputAxes )
+	{
+		super(other, inputAxes, outputAxes );
+		this.transformations = other.transformations; // TODO is shallow copy okay?
+	}
+
 	public CoordinateTransformation[] getTransformations()
 	{
 		return transformations;

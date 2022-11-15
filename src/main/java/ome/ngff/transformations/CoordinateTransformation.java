@@ -12,4 +12,8 @@ public interface CoordinateTransformation
 
 	public String getOutput();
 
+	public String[] getInputAxes();
+
+	public String[] getOutputAxes();
+
 }
