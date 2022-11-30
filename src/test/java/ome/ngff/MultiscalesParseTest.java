@@ -24,7 +24,9 @@ public class MultiscalesParseTest
 	 */
 	public static void main( String[] args ) throws IOException
 	{
-		final String attrs = Files.readString(  Paths.get( args[0] ));
+//		final String attrs = Files.readString(  Paths.get( args[0] ));
+		final String attrs = new String( Files.readAllBytes( Paths.get( args[ 0 ] )));
+
 		final GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(CoordinateTransformation.class, new CoordinateTransformationAdapter() );
 		final Gson gson = gsonBuilder.create();

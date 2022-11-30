@@ -41,7 +41,8 @@ public class CoordinateTransformationsParseTest
 		String attrs = null;
 		try
 		{
-			attrs = Files.readString( Paths.get( zattrsUrl.toURI() ));
+//			attrs = Files.readString( Paths.get( zattrsUrl.toURI() ));
+			attrs = new String( Files.readAllBytes( Paths.get( zattrsUrl.toURI() )));
 		}
 		catch ( IOException e )
 		{
@@ -89,7 +90,8 @@ public class CoordinateTransformationsParseTest
 		String attrs = null;
 		try
 		{
-			attrs = Files.readString( Paths.get( zattrsUrl.toURI() ));
+//			attrs = Files.readString( Paths.get( zattrsUrl.toURI() ));
+			attrs = new String( Files.readAllBytes( Paths.get( zattrsUrl.toURI() )));
 		}
 		catch ( IOException e )
 		{
