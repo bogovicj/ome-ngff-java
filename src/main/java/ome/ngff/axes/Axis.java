@@ -73,4 +73,13 @@ public class Axis
 		return new Axis( String.format( "dim_%d", index ), "array", null, true );
 	}
 
+	public static Axis[] space( String unit, String... names )
+	{
+		final Axis[] axes = new Axis[ names.length ];
+		for( int i = 0; i < names.length; i++ )
+			axes[ i ] = new Axis( names[i], "space", unit, false );
+
+		return axes;
+	}
+
 }
