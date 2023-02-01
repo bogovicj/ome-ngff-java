@@ -1,0 +1,76 @@
+{
+    "multiscales": [
+        {
+            "axes": [
+                {
+                    "name": "z",
+                    "type": "space",
+                    "unit": "nanometer"
+                },
+                {
+                    "name": "y",
+                    "type": "space",
+                    "unit": "nanometer"
+                },
+                {
+                    "name": "x",
+                    "type": "space",
+                    "unit": "nanometer"
+                }
+            ],
+            "datasets": [
+                {
+                    "coordinateTransformations": [
+                        {
+                            "scale": [
+                                64.0,
+                                64.0,
+                                64.0
+                            ],
+                            "type": "scale"
+                        }
+                    ],
+                    "path": "s0"
+                },
+                {
+                    "coordinateTransformations": [
+                        {
+                            "scale": [
+                                128.0,
+                                128.0,
+                                128.0
+                            ],
+                            "type": "scale"
+                        }
+                    ],
+                    "path": "s1"
+                },
+                {
+                    "coordinateTransformations": [
+                        {
+                            "scale": [
+                                256.0,
+                                256.0,
+                                256.0
+                            ],
+                            "type": "scale"
+                        }
+                    ],
+                    "path": "s2"
+                }
+            ],
+            "metadata": {
+                "order": 0,
+                "preserve_range": true,
+                "scale": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            },
+            "name": "zyx",
+            "type": "skimage.transform._warps.rescale",
+            "version": "0.4"
+        }
+    ]
+}
