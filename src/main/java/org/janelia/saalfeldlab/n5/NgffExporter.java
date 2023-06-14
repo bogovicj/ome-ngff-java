@@ -49,9 +49,11 @@ import org.janelia.saalfeldlab.n5.universe.metadata.ome.ngff.v04.coordinateTrans
 import org.janelia.saalfeldlab.n5.universe.metadata.ome.ngff.v04.coordinateTransformations.ScaleCoordinateTransformation;
 import org.scijava.ItemVisibility;
 import org.scijava.app.StatusService;
+import org.scijava.command.Command;
 import org.scijava.command.ContextCommand;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
+import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
 
 import java.awt.event.WindowEvent;
@@ -65,6 +67,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.DoubleStream;
 
+@Plugin(type = Command.class, menuPath = "File>Save As>Ngff")
 public class NgffExporter extends ContextCommand implements WindowListener {
 
   public static final String GZIP_COMPRESSION = "gzip";
@@ -150,7 +153,6 @@ public class NgffExporter extends ContextCommand implements WindowListener {
 	this.image = image;
 	this.rootLocation = rootLocation;
 	this.dataset = N5URL.normalizeGroupPath(dataset);
-	System.out.println( dataset );
 
 	this.blockSizeArg = blockSizeArg;
 	this.compressionArg = compression;
@@ -197,13 +199,15 @@ public class NgffExporter extends ContextCommand implements WindowListener {
 			res = new double[] { image.getCalibration().pixelWidth, image.getCalibration().pixelHeight,
 					image.getCalibration().pixelDepth };
 
+		final String normDataset = N5URL.normalizeGroupPath(dataset);
+
 		Img<T> img = ImageJFunctions.wrap(image);
-		write( img, n5, dataset + "/s0", compression );
+		write( img, n5, normDataset + "/s0", compression );
 
 		DatasetAttributes[] dsetAttrs = new DatasetAttributes[numScales];
 		OmeNgffDataset[] msDatasets = new OmeNgffDataset[numScales];
 
-		String dset = dataset + "/s0";
+		String dset = normDataset + "/s0";
 		dsetAttrs[0] = n5.getDatasetAttributes(dset);
 		msDatasets[0] = new OmeNgffDataset();
 		msDatasets[0].path = dset;
@@ -216,7 +220,7 @@ public class NgffExporter extends ContextCommand implements WindowListener {
 			
 			scale *= 2;
 			final SubsampleIntervalView<T> imgDown = downsampleSimple( img, scale );
-			dset = String.format("%s/s%d", dataset, i);
+			dset = String.format("%s/s%d", normDataset, i);
 
 			write(imgDown, n5, dset, compression );
 			dsetAttrs[i] = n5.getDatasetAttributes(dset);
@@ -231,12 +235,12 @@ public class NgffExporter extends ContextCommand implements WindowListener {
 	
 		}
 
-		final OmeNgffMultiScaleMetadata ms = buildMetadata(dataset, dsetAttrs, msDatasets);
+		final OmeNgffMultiScaleMetadata ms = buildMetadata(normDataset, dsetAttrs, msDatasets);
 		OmeNgffMultiScaleMetadata[] msList = new OmeNgffMultiScaleMetadata[] { ms };
 
-		OmeNgffMetadata meta = new OmeNgffMetadata(dataset, msList);
+		OmeNgffMetadata meta = new OmeNgffMetadata(normDataset, msList);
 		try {
-			new OmeNgffMetadataParser().writeMetadata(meta, n5, dataset);
+			new OmeNgffMetadataParser().writeMetadata(meta, n5, normDataset);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
